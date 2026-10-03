@@ -2,19 +2,20 @@ namespace RecipeApp.Domain.Services;
 //Interface for different Timers
 public interface ITimerService
 {
-    public TimeSpan Remaining { get; }
-    public bool IsRunning { get; }
-    //Should only be called when no other timer is running
-    public void Start(TimeSpan duration);
+    TimeSpan Remaining { get; }
+    TimeSpan Duration { get; }
+    bool IsRunning { get; }
+    //Should only be called when no other timer is running, throw InvalidOperationException
+    void Start(TimeSpan duration);
     //Shouldn't be called if nothing is running
-    public void Pause();
+    void Pause();
+    //Resumes a paused timer
+    void Resume();
+    //Resets differently depending on what timer it is
+    void Reset();
 
-    public void Resume();
-
-    public void Reset();
-
-    public event EventHandler? Tick;
-    public event EventHandler? Finished;
+    event EventHandler? Tick;
+    event EventHandler? Finished;
     
 
 }
