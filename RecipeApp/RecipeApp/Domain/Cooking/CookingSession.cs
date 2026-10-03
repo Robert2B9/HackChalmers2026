@@ -7,6 +7,7 @@ public class CookingSession
     public Recipe Recipe { get; }
     public CookingSession(Recipe recipe)
     {
+        ArgumentNullException.ThrowIfNull(recipe);
         if (recipe.Steps.Count == 0) throw new ArgumentException("Recipe must have at least one step");
         if (recipe.Ingredients.Count == 0) throw new ArgumentException("Recipe must have at least one ingredient");
         Recipe = recipe;
