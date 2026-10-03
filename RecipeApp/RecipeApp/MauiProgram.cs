@@ -33,5 +33,6 @@ public static class MauiProgram
         // TODO: register ViewModels
         builder.Services.AddTransient<MainViewModel>();
         // TODO: register Pages
+        builder.Services.AddTransient<MainPage>();
     }
 }
