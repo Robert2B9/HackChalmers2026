@@ -6,11 +6,13 @@ public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty] string _greeting = "Hello";
     [ObservableProperty] int _count = 0;
-
+    
     [RelayCommand]
     private void Increment()
     {
         Count++;
         Greeting = $"Hello {Count}!";
     }
+
+
 }

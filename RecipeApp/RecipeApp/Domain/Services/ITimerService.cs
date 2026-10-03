@@ -3,7 +3,6 @@ namespace RecipeApp.Domain.Services;
 public interface ITimerService
 {
     TimeSpan Remaining { get; }
-    TimeSpan Duration { get; }
     bool IsRunning { get; }
     //Should only be called when no other timer is running, throw InvalidOperationException
     void Start(TimeSpan duration);

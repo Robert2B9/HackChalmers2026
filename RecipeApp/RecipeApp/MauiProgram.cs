@@ -1,6 +1,9 @@
-﻿using CommunityToolkit.Maui;
+﻿//using Android.OS;
+using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
 using Microsoft.Extensions.Logging;
+using RecipeApp.Domain.Services;
+using RecipeApp.Infrastructure.Timers;
 using RecipeApp.ViewModels;
 
 namespace RecipeApp;
@@ -30,6 +33,7 @@ public static class MauiProgram
     private static void RegisterServices(this MauiAppBuilder builder)
     {
         // TODO: register domain services (interfaces -> implementations)
+        builder.Services.AddSingleton<ITimerService, CountdownTimerService>();
         // TODO: register ViewModels
         builder.Services.AddTransient<MainViewModel>();
         // TODO: register Pages
