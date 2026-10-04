@@ -1,3 +1,5 @@
+using RecipeApp.Pages;
+
 namespace RecipeApp;
 
 public class AppShell : Shell
@@ -7,10 +9,12 @@ public class AppShell : Shell
         ShellContent shellContent = new ShellContent();
         shellContent.Title = "Recipe App";
         shellContent.Route = "main";
-        shellContent.ContentTemplate = new DataTemplate(typeof(MainPage)); 
+        shellContent.ContentTemplate = new DataTemplate(typeof(RecipeListPage));
+        //shellContent.ContentTemplate = new DataTemplate(typeof(MainPage)); 
         Items.Add(shellContent);
         FlyoutBehavior = FlyoutBehavior.Disabled;
+   
         
-        // TODO: register push routes (cooking page, etc.)
+        Routing.RegisterRoute("cooking", typeof(CookingPage)); 
     }
 }

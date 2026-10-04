@@ -3,7 +3,10 @@ using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
 using Microsoft.Extensions.Logging;
 using RecipeApp.Domain.Services;
+using RecipeApp.Infrastructure.Navigation;
+using RecipeApp.Infrastructure.Recipes;
 using RecipeApp.Infrastructure.Timers;
+using RecipeApp.Pages;
 using RecipeApp.ViewModels;
 
 namespace RecipeApp;
@@ -32,11 +35,17 @@ public static class MauiProgram
 
     private static void RegisterServices(this MauiAppBuilder builder)
     {
-        // TODO: register domain services (interfaces -> implementations)
+// Services
         builder.Services.AddSingleton<ITimerService, CountdownTimerService>();
-        // TODO: register ViewModels
-        builder.Services.AddTransient<MainViewModel>();
-        // TODO: register Pages
-        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddSingleton<IRecipeRepository, InMemoryRecipeRepository>();
+        builder.Services.AddSingleton<INavigationService, ShellNavigationService>();
+
+// ViewModels
+        builder.Services.AddTransient<RecipeListViewModel>();
+        builder.Services.AddTransient<CookingViewModel>();
+
+// Pages
+        builder.Services.AddTransient<RecipeListPage>();
+        builder.Services.AddTransient<CookingPage>();
     }
 }
