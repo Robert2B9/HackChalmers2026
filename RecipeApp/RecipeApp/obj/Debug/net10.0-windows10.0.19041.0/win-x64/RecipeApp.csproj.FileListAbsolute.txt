@@ -551,3 +551,4 @@ C:\Users\rober\Documents\GitHub\HackChalmers2026\RecipeApp\RecipeApp\obj\Debug\n
 C:\Users\rober\Documents\GitHub\HackChalmers2026\RecipeApp\RecipeApp\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt
 C:\Users\rober\Documents\GitHub\HackChalmers2026\RecipeApp\RecipeApp\obj\Debug\net10.0-windows10.0.19041.0\win-x64\qualifiers.txt.intermediate
 C:\Users\rober\Documents\GitHub\HackChalmers2026\RecipeApp\RecipeApp\obj\Debug\net10.0-windows10.0.19041.0\win-x64\MultipleQualifiersPerDimensionFound.txt
+C:\Users\rober\Documents\GitHub\HackChalmers2026\RecipeApp\RecipeApp\bin\Debug\net10.0-windows10.0.19041.0\win-x64\secrets.json

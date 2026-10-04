@@ -14,11 +14,16 @@ namespace RecipeApp.Infrastructure.Suggestions;
 /// </summary>
 public class GeminiRecipeSuggestionService : IRecipeSuggestionService
 {
-    // Change this if the API answers 404 "model not found". gemini-2.5-flash is a fallback.
-    private const string Model = "gemini-3.5-flash";
+    // Tried in order. A 503 (overloaded) or 429 (rate limit) moves on to the next one.
+    private static readonly string[] Models =
+    {
+        "gemini-3.8-flash",
+        "gemini-3.5-flash",
+        "gemini-3.1-flash-lite"
+    };
 
-    private const string Endpoint =
-        "https://generativelanguage.googleapis.com/v1beta/models/" + Model + ":generateContent";
+    private static string EndpointFor(string model) =>
+        "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent";
 
     // File in Resources/Raw (bundled into the app, kept out of git). Contents: { "GeminiApiKey": "..." }
     private const string SecretsFile = "secrets.json";
@@ -55,35 +60,43 @@ public class GeminiRecipeSuggestionService : IRecipeSuggestionService
             throw new RecipeSuggestionException("Type what you want to cook first.");
 
         string apiKey = await GetApiKeyAsync(cancellationToken);
-        string responseBody;
+        string requestJson = BuildRequestJson(request);
+        string lastError = "";
 
-        try
+        foreach (string model in Models)
         {
-            using var httpRequest = new HttpRequestMessage(HttpMethod.Post, Endpoint);
-            httpRequest.Headers.Add("x-goog-api-key", apiKey);
-            httpRequest.Content = new StringContent(
-                BuildRequestJson(request), Encoding.UTF8, "application/json");
+            try
+            {
+                using var httpRequest = new HttpRequestMessage(HttpMethod.Post, EndpointFor(model));
+                httpRequest.Headers.Add("x-goog-api-key", apiKey);
+                httpRequest.Content = new StringContent(requestJson, Encoding.UTF8, "application/json");
 
-            using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken);
-            responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+                using HttpResponseMessage response = await _httpClient.SendAsync(httpRequest, cancellationToken);
+                string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
 
-            // Typical causes: 400 = bad request/schema, 403 = bad key, 404 = wrong model name,
-            // 429 = rate limit. The body usually says exactly what is wrong.
-            if (!response.IsSuccessStatusCode)
-                throw new RecipeSuggestionException(
-                    $"Gemini returned {(int)response.StatusCode}: {Shorten(responseBody)}");
-        }
-        catch (HttpRequestException ex)
-        {
-            throw new RecipeSuggestionException("Could not reach Gemini. Check the internet connection.", ex);
-        }
-        catch (TaskCanceledException ex) when (!cancellationToken.IsCancellationRequested)
-        {
-            // HttpClient reports a timeout as a cancellation we did not ask for.
-            throw new RecipeSuggestionException("Gemini took too long to answer. Try again.", ex);
+                if (response.IsSuccessStatusCode)
+                    return MapToRecipes(ParseResponse(responseBody));
+
+                int status = (int)response.StatusCode;
+                lastError = $"{model} returned {status}: {Shorten(responseBody)}";
+
+                if (status is 503 or 429 or 404)
+                    continue; // temporary problem: try the next model
+
+                throw new RecipeSuggestionException($"Gemini returned {status}: {Shorten(responseBody)}");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new RecipeSuggestionException("Could not reach Gemini. Check the internet connection.", ex);
+            }
+            catch (TaskCanceledException ex) when (!cancellationToken.IsCancellationRequested)
+            {
+                throw new RecipeSuggestionException("Gemini took too long to answer. Try again.", ex);
+            }
         }
 
-        return MapToRecipes(ParseResponse(responseBody));
+        throw new RecipeSuggestionException("Gemini is busy right now. Try again in a minute. (" + lastError + ")");
+        
     }
 
     // Builds the JSON we POST. responseSchema forces Gemini's answer into our exact shape.
