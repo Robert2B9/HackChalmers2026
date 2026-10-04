@@ -1,5 +1,5 @@
 using RecipeApp.Pages;
-
+using RecipeApp.UI;
 namespace RecipeApp;
 
 public class AppShell : Shell
@@ -13,6 +13,7 @@ public class AppShell : Shell
         //shellContent.ContentTemplate = new DataTemplate(typeof(MainPage)); 
         Items.Add(shellContent);
         FlyoutBehavior = FlyoutBehavior.Disabled;
+        Shell.SetBackgroundColor(this, AppColours.Background);
    
         
         Routing.RegisterRoute("cooking", typeof(CookingPage)); 

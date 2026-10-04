@@ -1,7 +1,7 @@
 using CommunityToolkit.Maui.Markup;
 using RecipeApp.Domain.Models;
 using RecipeApp.ViewModels;
-
+using RecipeApp.UI;
 namespace RecipeApp.Pages;
 
 /// <summary>
@@ -14,12 +14,14 @@ public class RecipeListPage : ContentPage
     {
         BindingContext = viewModel;
         Title = "Recipes";
-
+        BackgroundColor = AppColours.Background;
         // Text box for the AI request. Two-way: typing updates vm.Prompt.
         Entry promptEntry = new Entry
         {
             Placeholder = "Ingredients, diet, cuisine...",
-            Margin = new Thickness(12, 8, 12, 0)
+            Margin = new Thickness(12, 8, 12, 0),
+            TextColor = Colors.Black,
+            PlaceholderColor = Colors.DimGrey
         }
         .Bind(Entry.TextProperty,
               static (RecipeListViewModel vm) => vm.Prompt,
@@ -28,7 +30,10 @@ public class RecipeListPage : ContentPage
         Button suggestButton = new Button
         {
             Text = "Suggest recipes with AI",
-            Margin = new Thickness(12, 8)
+            Margin = new Thickness(12, 8),
+            HorizontalOptions = LayoutOptions.Center,
+            Padding = new Thickness(24, 10),
+            BackgroundColor = AppColours.Accent
         }
         .BindCommand(static (RecipeListViewModel vm) => vm.SuggestCommand);
 

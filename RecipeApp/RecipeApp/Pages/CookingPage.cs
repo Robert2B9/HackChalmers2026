@@ -1,6 +1,6 @@
 using CommunityToolkit.Maui.Markup;
 using RecipeApp.ViewModels;
-
+using RecipeApp.UI;
 namespace RecipeApp.Pages;
 
 /// <summary>
@@ -16,6 +16,7 @@ public class CookingPage : ContentPage
         _viewModel = viewModel;
         BindingContext = viewModel;
         Title = "Cooking";
+        BackgroundColor = AppColours.Background;
 
         Content = new ScrollView
         {
@@ -48,22 +49,46 @@ public class CookingPage : ContentPage
 
                             // Start / Pause / Resume (the label comes from the ViewModel).
                             new Button()
+                                {
+                                    HorizontalOptions = LayoutOptions.Center,
+                                    Padding = new Thickness(24, 10),
+                                    BackgroundColor = AppColours.Accent
+                                }
                                 .BindCommand(static (CookingViewModel vm) => vm.ToggleTimerCommand)
-                                .Bind(Button.TextProperty, static (CookingViewModel vm) => vm.TimerButtonText),
+                                .Bind(Button.TextProperty, 
+                                    static (CookingViewModel vm) => vm.TimerButtonText),
+                                    
 
-                            new Button { Text = "Reset timer" }
+                            new Button
+                                {
+                                    Text = "Reset timer", 
+                                    HorizontalOptions = LayoutOptions.Center,
+                                    Padding = new Thickness(24, 10),
+                                    BackgroundColor = AppColours.Accent
+                                }
                                 .BindCommand(static (CookingViewModel vm) => vm.ResetTimerCommand)
                         }
                     }
                     .Bind(VisualElement.IsVisibleProperty, static (CookingViewModel vm) => vm.HasTimer),
 
                     // Navigation between steps. Back is hidden on the first step.
-                    new Button { Text = "Back" }
+                    new Button
+                        {
+                            Text = "Back",
+                            HorizontalOptions = LayoutOptions.Center,
+                            Padding = new Thickness(24, 10),
+                            BackgroundColor = AppColours.Accent
+                        }
                         .BindCommand(static (CookingViewModel vm) => vm.BackCommand)
                         .Bind(VisualElement.IsVisibleProperty, static (CookingViewModel vm) => vm.CanGoBack),
 
                     // Says "Next", or "Finish" on the last step.
-                    new Button()
+                    new Button
+                        {
+                            HorizontalOptions = LayoutOptions.Center,
+                            Padding = new Thickness(24, 10),
+                            BackgroundColor = AppColours.Accent
+                        }
                         .BindCommand(static (CookingViewModel vm) => vm.NextCommand)
                         .Bind(Button.TextProperty, static (CookingViewModel vm) => vm.NextButtonText)
                 }
