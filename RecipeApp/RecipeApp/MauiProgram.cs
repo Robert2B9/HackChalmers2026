@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using RecipeApp.Domain.Services;
 using RecipeApp.Infrastructure.Navigation;
 using RecipeApp.Infrastructure.Recipes;
+using RecipeApp.Infrastructure.Suggestions;
 using RecipeApp.Infrastructure.Timers;
 using RecipeApp.Pages;
 using RecipeApp.ViewModels;
@@ -47,5 +48,10 @@ public static class MauiProgram
 // Pages
         builder.Services.AddTransient<RecipeListPage>();
         builder.Services.AddTransient<CookingPage>();
+        
+        builder.Services.AddSingleton(new HttpClient { Timeout = TimeSpan.FromSeconds(60) });
+        builder.Services.AddSingleton<IRecipeSuggestionService, GeminiRecipeSuggestionService>();
+        // Offline demo fallback: use this line instead of the Gemini one above.
+        // builder.Services.AddSingleton<IRecipeSuggestionService, FakeRecipeSuggestionService>();
     }
 }
