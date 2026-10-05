@@ -1,7 +1,12 @@
 ﻿//using Android.OS;
+using System;
+using System.Net.Http;
 using CommunityToolkit.Maui;
 using CommunityToolkit.Maui.Markup;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.Controls.Hosting;
+using Microsoft.Maui.Hosting;
 using RecipeApp.Domain.Services;
 using RecipeApp.Infrastructure.Navigation;
 using RecipeApp.Infrastructure.Recipes;

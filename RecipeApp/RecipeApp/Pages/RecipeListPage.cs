@@ -1,4 +1,8 @@
+using System.Linq;
 using CommunityToolkit.Maui.Markup;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Graphics;
 using RecipeApp.Domain.Models;
 using RecipeApp.ViewModels;
 using RecipeApp.UI;

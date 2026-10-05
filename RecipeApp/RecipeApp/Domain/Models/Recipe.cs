@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace RecipeApp.Domain.Models;
 
 public record Recipe

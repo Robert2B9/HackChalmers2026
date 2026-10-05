@@ -1,3 +1,5 @@
+using Microsoft.Maui.Graphics;
+
 namespace RecipeApp.UI;
 public static class AppColours
 {

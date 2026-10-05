@@ -1,4 +1,6 @@
 using CommunityToolkit.Maui.Markup;
+using Microsoft.Maui;
+using Microsoft.Maui.Controls;
 using RecipeApp.ViewModels;
 using RecipeApp.UI;
 namespace RecipeApp.Pages;

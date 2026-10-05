@@ -1,3 +1,5 @@
+using System;
+
 namespace RecipeApp.Domain.Services;
 //Interface for different Timers
 public interface ITimerService
